@@ -13,7 +13,7 @@ jobs:
       - run:
           name: Install and configure dependencies
           command: |
-            npm install -g gh-pages
+            npm install gh-pages
             git config user.email "jonbot@jonbannister.com"
             git config user.name "jonbot"
       - add_ssh_keys:
@@ -21,7 +21,9 @@ jobs:
             - "e6:56:b5:74:9e:89:d9:7d:c2:58:68:21:e9:73:38:43"
       - run:
           name: Deploy dist to gh-pages branch
-          command: gh-pages --dotfiles --message "[skip ci] Auto-deployment" --dist dist/
+          command: | 
+            function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
+            npm-do gh-pages --dotfiles --message "[skip ci] Auto-deployment" --dist dist/
 workflows:
   version: 2
   build_and_deploy:
