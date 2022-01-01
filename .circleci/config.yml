@@ -23,7 +23,7 @@ jobs:
           name: Deploy dist to gh-pages branch
           command: | 
             function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
-            npm-do gh-pages --dotfiles --message "[skip ci] Auto-deployment" --dist dist/
+            npm-do gh-pages --dotfiles --message "[skip ci] Auto deployment" --dist dist/
 workflows:
   version: 2
   build_and_deploy:
