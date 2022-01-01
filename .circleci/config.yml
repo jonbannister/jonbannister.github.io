@@ -8,6 +8,7 @@ jobs:
       - run:
           name: Run npm build
           command: |
+            npm install
             npm run build
   deploy:
     docker:
