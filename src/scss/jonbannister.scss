@@ -1,11 +1,12 @@
+@import '_constants.scss';
+
 html,body {
-	background: -moz-radial-gradient(radial, center center, 0, center center, 600, from(rgb(100,100,100)), to(rgb(00,00,00)));
 	background: -webkit-gradient(radial, center center, 0, center center, 600, from(rgb(100,100,100)), to(rgb(00,00,00)));
 	background-position: center center;
-	background-image: url('radial-bg1.jpg');
+	//background-image: url('radial-bg1.jpg');
 	height: 99%;
 	color: #bbbbdd;
-	font-family: 'Droid Sans', sans-serif;
+	font-family: $primary-font, sans-serif;
 	
 }
 
@@ -80,7 +81,7 @@ html,body {
 .navbuttons button {
 	margin: 0;
 	background: none;
-	font-family: 'Droid Sans', sans-serif;
+	font-family: $primary-font, sans-serif;
 	background: black;
 	border: none;
 	color: #aaaaaa;
@@ -235,6 +236,10 @@ img#elementalImg {
 	position:absolute;
 	left:-4%;
 	top:0%;
+}
+
+img#progamer {
+	width: 100%;
 }
 
 .pane#whatisthis {
