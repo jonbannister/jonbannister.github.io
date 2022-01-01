@@ -1,5 +1,5 @@
 import jQuery from "jquery";
-window.$ = window.jQuery = jQuery;
+var $ = window.$ = window.jQuery = jQuery;
 
 var panelState = {
 	currentPanel: 0
