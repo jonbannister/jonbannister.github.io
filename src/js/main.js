@@ -55,18 +55,6 @@ function showTooltip(args) {
 			newtext = "Working in Python, SQL, and C#. Used Test-driven and Agile development.";
 			width = 150;
 			break;
-		case("ocado"):
-			t0p = "45%";
-			left = "8%";
-			newtext = "Developing and designing a front-to-back large scale web project using Java, JS, and Oracle.";
-			width = 150;
-			break;
-		case("sms"):
-			t0p = "51%";
-			left = "5%";
-			newtext = "Shadowing a lead programmer and performing QA.";
-			width = 150;
-			break;
 		case("ce"):
 			t0p = "59%";
 			left = "-1%";
