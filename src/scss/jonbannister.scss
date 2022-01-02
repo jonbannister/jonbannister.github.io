@@ -30,6 +30,11 @@ html,body {
 
 }
 
+span#bigLetter {
+	font-size: xx-large;
+	padding-right: 0.1em;
+}
+
 .pane {
 	background: #04346c;
 	background-image: linear-gradient(right bottom, rgb(4,52,108) 43%, rgb(8,64,128) 72%, rgb(4,52,108) 86%);

@@ -1,22 +1,25 @@
 import jQuery from "jquery";
+import feather from "feather-icons";
 var $ = window.$ = window.jQuery = jQuery;
 
 var panelState = {
 	currentPanel: 0
 };
 window.panelState = panelState;
-var panels = new Array();
-var panelPositions = new Array();
+var panels = [];
+var panelPositions = [];
 var markerPositions = [36,106,175,240];
 var transitioning = false;
 var dropdownFirstTime = true;
 
 $.ready = function() {
 	initSetup();
-	$("body").keydown(keyPressed);
+	let body = $("body");
+	let infoBoxes = $(".info strong");
+	body.keydown(keyPressed);
 	$(".demos h3").click(dropdownClicked);
-	$(".info strong").mouseenter(showTooltip);
-	$(".info strong").mouseleave(hideTooltip);
+	infoBoxes.mouseenter(showTooltip);
+	infoBoxes.mouseleave(hideTooltip);
 	$(".info img").click(imageClicked);
 	$(".lightbox").click(closeLightbox);
 	//moveto(1);
@@ -67,14 +70,15 @@ function showTooltip(args) {
 			newtext = "Python, with extensive Snowflake and MongoDB experience.";
 			break;
 	}
-	$(".tipbox").css({
+	let tipbox = $(".tipbox");
+	tipbox.css({
 		"top": t0p,
 		"left": left,
 		"width": width
 	});
 	
 	$(".tiptext").text(newtext);
-	$(".tipbox").fadeIn();
+	tipbox.fadeIn();
 		
 }
 
@@ -83,18 +87,19 @@ function hideTooltip() {
 }
 
 function dropdownClicked(args) {
-	$(".tipbox").hide();
-	if (dropdownFirstTime && args.target.id == "education") {
-		$(".tipbox").css({
+	let tipBox = $(".tipbox");
+	tipBox.hide();
+	if (dropdownFirstTime && args.target.id === "education") {
+		tipBox.css({
 			"top": "7%",
 			"left": "-20%",
 			"width": 120
 		});
 		$(".tiptext").text("Hover over this text for more info!");
-		$(".tipbox").fadeIn();
+		tipBox.fadeIn();
 		dropdownFirstTime = false;
 	}
-	if (args.target.id == "elemental") {
+	if (args.target.id === "elemental") {
 		$(".info img#elementalImg").fadeToggle();
 	}
 	$("#"+args.target.id+"Div").slideToggle("slow");
@@ -102,38 +107,61 @@ function dropdownClicked(args) {
 
 var konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65, 13];
 var konamiPos = 0;
+var konamiToIcon = {38: "arrow-up", 40: "arrow-down", 37: "arrow-left", 39: "arrow-right", 13: "check"};
+var bigLetters = {65: "A", 66: "B"};
+window.inSecretMode = false;
 
 function konamiCode(key) {
-	if (key == konami[konamiPos])
+	let container = $("#konamiProgress");
+	if (key === konami[konamiPos]) {
+		let icon = konamiToIcon[key];
+		let letter = bigLetters[key];
+		if (icon) {
+			container.append(`<i data-feather="${icon}"></i>`);
+			feather.replace();
+		}
+		else if (letter) {
+			container.append(`<span id='bigLetter'>${letter}</span>`);
+		}
 		konamiPos++;
-	else
+		if (konamiPos === konami.length){
+			window.inSecretMode = true;
+			rollToTop();
+		}
+		else if (konamiPos >= konami.length) {
+			konamiPos = 0;
+			container.empty();
+		}
+	}
+	else {
 		konamiPos = 0;
-	if (konamiPos == konami.length){
-		rollToTop();
-		konamiPos = 0;
+		container.empty();
 	}
 }
 
 function rollToTop() {
 	console.log("rolling");
 	moveto(0);
-	$("body").css("-moz-transform-origin","50% 50% 225px");
-	$("body").css("-webkit-transform-origin","50% 50% 225px");
+	let body = $("body");
+	let whatisthis = $("#whatisthis");
+	let p0 = $("#p0");
+	body.css("-moz-transform-origin","50% 50% 225px");
+	body.css("-webkit-transform-origin","50% 50% 225px");
 	setTimeout(function(){
-		$("#whatisthis").css("border-spacing",270);
-		$("#whatisthis").animate({
+		whatisthis.css("border-spacing",270);
+		whatisthis.animate({
 			"border-spacing": 360
 		},{
 			step:function(now){
-				$("#whatisthis").css("-moz-transform","rotateX("+now+"deg)");
-				$("#whatisthis").css("-webkit-transform","rotateX("+now+"deg)");
-				$("#p0").css("-moz-transform","rotateX("+(now-270)+"deg)");
-				$("#p0").css("-webkit-transform","rotateX("+(now-270)+"deg)");
+				whatisthis.css("-moz-transform","rotateX("+now+"deg)");
+				whatisthis.css("-webkit-transform","rotateX("+now+"deg)");
+				p0.css("-moz-transform","rotateX("+(now-270)+"deg)");
+				p0.css("-webkit-transform","rotateX("+(now-270)+"deg)");
 			},
 			time: 1500,
 			complete:function(){
-				$("body").css("-moz-transform-origin","50% 50% 250px");
-				$("body").css("-webkit-transform-origin","50% 50% 250px");
+				body.css("-moz-transform-origin","50% 50% 250px");
+				body.css("-webkit-transform-origin","50% 50% 250px");
 			}
 		});
 	}, 600);
@@ -141,7 +169,8 @@ function rollToTop() {
 
 export function moveto(target, reversed)
 {
-	if ($(".tiptext").text().indexOf("Click") == -1)
+	exitSecretMode();
+	if ($(".tiptext").text().indexOf("Click") === -1)
 		$(".tipbox").hide();
 
 	transitioning = true;
@@ -157,8 +186,9 @@ export function moveto(target, reversed)
 	let startValue =  reversed ? panelPositions[target] : distToFront;
 	let targetValue = reversed ? 360 : 0;
 
-	$(".pane").css("border-spacing",startValue);
-	$(".pane").animate({
+	let pane = $(".pane");
+	pane.css("border-spacing",startValue);
+	pane.animate({
 		"border-spacing": targetValue
 	},{
 		step:function(now){
@@ -181,25 +211,45 @@ export function moveto(target, reversed)
 	}, time);
 }
 
+function goRight() {
+	moveto((window.panelState.currentPanel+1)%4, false);
+}
+
+function goLeft() {
+	moveto((window.panelState.currentPanel+3)%4, true);
+}
+
+function exitSecretMode() {
+	let whatIsThis =$("#whatisthis");
+	whatIsThis.css("-moz-transform","rotateX(270deg)");
+	whatIsThis.css("-webkit-transform","rotateX(270deg)");
+	let p0 = $("#p0");
+	p0.css("-moz-transform","rotateX(0deg)");
+	p0.css("-webkit-transform","rotateX(0deg)");
+	window.inSecretMode = false;
+}
+
 function keyPressed(args) {
 	console.log(`key ${args.which} was pressed.`);
 	konamiCode(args.which);
+	if (transitioning) {
+		return;
+	}
+	// escape
+	if (args.which === 27){
+		exitSecretMode();
+	}
+	if (window.inSecretMode) {
+		console.log("In secret mode, doing nothing.");
+		return;
+	}
 	// right arrow
 	if (args.which === 39) {
-		if (!transitioning)
-			moveto((window.panelState.currentPanel+1)%4, false);
+		goRight();
 	}
 	// left arrow
 	else if (args.which === 37) {
-		if (!transitioning)
-			moveto((window.panelState.currentPanel+3)%4, true);
-	}
-	// escape
-	else if (args.which===27){
-		$("#whatisthis").css("-moz-transform","rotateX(270deg)");
-		$("#whatisthis").css("-webkit-transform","rotateX(270deg)");
-		$("#p0").css("-moz-transform","rotateX(0deg)");
-		$("#p0").css("-webkit-transform","rotateX(0deg)");
+		goLeft();
 	}
 }
 
